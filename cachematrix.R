@@ -1,4 +1,5 @@
-# Functions to compute matrix inverse. Limitation: Matrix must be invertible.
+# Functions to compute matrix inverse using special "matrix" object.
+# Limitation: Matrix must be invertible.
 # Improves speed of standard solve function by caching matrix inverse once
 #   calculated for use in subsequent calls.
 #
@@ -9,11 +10,12 @@
 #   ainv <- cacheSolve(a)
 #   identity_matrix <- round(a$get() %*% ainv)
 
-# Function makeCacheMatrix: Set, store, and retrieve matrix and its inverse.
+# Function `makeCacheMatrix`:
+#   This function creates a special "matrix" object that can cache its inverse.
 
 makeCacheMatrix <- function(x = matrix()) {
     # Creates an object that caches the inverse of a matrix.
-    # Stores matrix and initializes cached inverse to NULL. 
+    # Stores matrix and initializes cached inverse to NULL.
     #
     # Args:
     #   x: Matrix to be stored. Defaults to 1x1 matrix with data NA.
@@ -60,13 +62,16 @@ makeCacheMatrix <- function(x = matrix()) {
         getinv = getinv)
 }
 
-# Function cacheSolve: Returns calculated or cached matrix inverse.
+# Function `cacheSolve`:
+#   This function computes the inverse of the special "matrix" returned by `makeCacheMatrix`
+#   above. If the inverse has already been calculated (and the matrix has not changed),
+#   then `cacheSolve` should retrieve the inverse from the cache.
 
 cacheSolve <- function(x, ...) {
     # Calculates inverse of a matrix if not previously cached.
     #
     # Args:
-    #   x: Invertible matrix.
+    #   x: Matrix object.
     #   ...: Optional arguments for standard solve function.
     #
     # Returns:
